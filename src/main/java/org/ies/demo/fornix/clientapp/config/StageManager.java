@@ -8,12 +8,10 @@ import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import org.ies.demo.fornix.clientapp.events.SceneResizeEvent;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Objects;
 
-@Component
 public class StageManager {
 
     private final Stage primaryStage;
@@ -32,12 +30,9 @@ public class StageManager {
     }
 
     public void switchScene(final FxmlView view) {
-        primaryStage.setMinWidth(1010);
-        primaryStage.setMinHeight(700);
         primaryStage.setTitle(applicationTitle);
 
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-
         Parent rootNode = loadRootNode(view.getFxmlPath());
 
 
@@ -54,12 +49,9 @@ public class StageManager {
                     ObservableValue<? extends Number> observableValue,
                     Number oldSceneWidth,
                     Number newSceneWidth) {
-
                 eventPublisher.publishEvent(new SceneResizeEvent(this, newSceneWidth));
-
             }
         });
-
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -68,19 +60,16 @@ public class StageManager {
 
         Parent rootNode = loadRootNode(view.getFxmlPath());
         primaryStage.getScene().setRoot(rootNode);
-
         primaryStage.show();
     }
 
 
     private Parent loadRootNode(String fxmlPath) {
-        Parent rootNode;
         try {
-            rootNode = fxmlLoader.load(fxmlPath);
+            return fxmlLoader.load(fxmlPath);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return rootNode;
     }
 
     public void switchToFullScreenMode() {

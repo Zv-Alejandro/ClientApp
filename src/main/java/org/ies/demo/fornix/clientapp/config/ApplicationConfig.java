@@ -25,9 +25,7 @@ public class ApplicationConfig {
 
     @Bean
     @Lazy
-    public StageManager stageManager(Stage stage) throws IOException {
-        return new StageManager(fxmlLoader, stage, applicationTitle, eventPublisher);
+    public StageManager stageManager(Stage primaryStage) throws IOException {
+        return new StageManager(fxmlLoader, primaryStage, applicationTitle, eventPublisher);
     }
 }
-
-// Сибелиус программа для печатания нот

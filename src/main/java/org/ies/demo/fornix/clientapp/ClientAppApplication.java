@@ -1,13 +1,13 @@
 package org.ies.demo.fornix.clientapp;
 
-import org.springframework.boot.SpringApplication;
+import javafx.application.Application;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class ClientAppApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(FxApplication.class, args);
+        Application.launch(FxApplication.class, args);
     }
 
 }

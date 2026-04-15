@@ -1,113 +1,113 @@
-package org.ies.demo.fornix.clientapp.controller;
-
-
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
-import org.ies.demo.fornix.clientapp.config.FxmlView;
-import org.ies.demo.fornix.clientapp.config.StageManager;
-import org.ies.demo.fornix.clientapp.events.LoginEvent;
-import org.ies.demo.fornix.clientapp.exception.ConstraintsException;
-import org.ies.demo.fornix.clientapp.exception.NotFoundException;
-import org.ies.demo.fornix.clientapp.exception.UserExistsException;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
-
-import java.net.URL;
-import java.util.Optional;
-import java.util.ResourceBundle;
-
-@Component
-public class LoginController implements Initializable {
-
-    @FXML
-    private Button signInButton;
-
-    @FXML
-    private Button signUpButton;
-
-    @FXML
-    private TextField userName;
-
-    @FXML
-    private Label loginErrorLabel;
-
-    StringProperty errorProperty = new SimpleStringProperty();
-
-    @FXML
-    private ImageView gClef;
-
-    private final StageManager stageManager;
-
-    private final UserService userService;
-
-    private final ApplicationEventPublisher eventPublisher;
-
-    @Lazy
-    public LoginController(StageManager stageManager, UserService userService, ApplicationEventPublisher eventPublisher) {
-        this.stageManager = stageManager;
-        this.userService = userService;
-        this.eventPublisher = eventPublisher;
-    }
-
-
-    public void loadUserAndOpenHomePage() {
-        Optional<User> user = userService.findByUsername(userName.getText());
-        if (user.isEmpty()) {
-            errorProperty.setValue(
-                    "No user with this name found.");
-            throw new NotFoundException(errorProperty.getValue());
-        }
-        stageManager.switchToNextScene(FxmlView.HOME);
-
-    }
-
-
-    public void saveUserAndOpenHomePage() {
-
-        String name = userName.getText();
-
-        Optional<User> user = userService.findByUsername(name);
-        if (user.isPresent()) {
-            errorProperty.setValue(
-                    "User with this name already exists! Sign in or use another name.");
-            throw new UserExistsException(errorProperty.getValue());
-        }
-
-        if (name.length() > 20 || name.isBlank()) {
-            errorProperty.setValue(
-                    "Username must not be blank or longer that 20 characters");
-            throw new ConstraintsException(errorProperty.getValue());
-        }
-        userService.saveUser(name);
-        stageManager.switchToNextScene(FxmlView.HOME);
-
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        gClef.setFitWidth(1000);
-        gClef.setPreserveRatio(true);
-        gClef.setSmooth(true);
-
-        loginErrorLabel.textProperty().bind(errorProperty);
-
-        userName.textProperty().addListener(new ChangeListener<>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable,
-                                String oldText,
-                                String newText) {
-                eventPublisher.publishEvent(new LoginEvent(this, newText));
-            }
-        });
-
-    }
-}
+//package org.ies.demo.fornix.clientapp.controller;
+//
+//
+//import javafx.beans.property.SimpleStringProperty;
+//import javafx.beans.property.StringProperty;
+//import javafx.beans.value.ChangeListener;
+//import javafx.beans.value.ObservableValue;
+//import javafx.fxml.FXML;
+//import javafx.fxml.Initializable;
+//import javafx.scene.control.Button;
+//import javafx.scene.control.Label;
+//import javafx.scene.control.TextField;
+//import javafx.scene.image.ImageView;
+//import org.ies.demo.fornix.clientapp.config.FxmlView;
+//import org.ies.demo.fornix.clientapp.config.StageManager;
+//import org.ies.demo.fornix.clientapp.events.LoginEvent;
+//import org.ies.demo.fornix.clientapp.exception.ConstraintsException;
+//import org.ies.demo.fornix.clientapp.exception.NotFoundException;
+//import org.ies.demo.fornix.clientapp.exception.UserExistsException;
+//import org.springframework.context.ApplicationEventPublisher;
+//import org.springframework.context.annotation.Lazy;
+//import org.springframework.stereotype.Component;
+//
+//import java.net.URL;
+//import java.util.Optional;
+//import java.util.ResourceBundle;
+//
+//@Component
+//public class LoginController implements Initializable {
+//
+//    @FXML
+//    private Button signInButton;
+//
+//    @FXML
+//    private Button signUpButton;
+//
+//    @FXML
+//    private TextField userName;
+//
+//    @FXML
+//    private Label loginErrorLabel;
+//
+//    StringProperty errorProperty = new SimpleStringProperty();
+//
+//    @FXML
+//    private ImageView gClef;
+//
+//    private final StageManager stageManager;
+//
+//    private final UserService userService;
+//
+//    private final ApplicationEventPublisher eventPublisher;
+//
+//    @Lazy
+//    public LoginController(StageManager stageManager, UserService userService, ApplicationEventPublisher eventPublisher) {
+//        this.stageManager = stageManager;
+//        this.userService = userService;
+//        this.eventPublisher = eventPublisher;
+//    }
+//
+//
+//    public void loadUserAndOpenHomePage() {
+//        Optional<User> user = userService.findByUsername(userName.getText());
+//        if (user.isEmpty()) {
+//            errorProperty.setValue(
+//                    "No user with this name found.");
+//            throw new NotFoundException(errorProperty.getValue());
+//        }
+//        stageManager.switchToNextScene(FxmlView.HOME);
+//
+//    }
+//
+//
+//    public void saveUserAndOpenHomePage() {
+//
+//        String name = userName.getText();
+//
+//        Optional<User> user = userService.findByUsername(name);
+//        if (user.isPresent()) {
+//            errorProperty.setValue(
+//                    "User with this name already exists! Sign in or use another name.");
+//            throw new UserExistsException(errorProperty.getValue());
+//        }
+//
+//        if (name.length() > 20 || name.isBlank()) {
+//            errorProperty.setValue(
+//                    "Username must not be blank or longer that 20 characters");
+//            throw new ConstraintsException(errorProperty.getValue());
+//        }
+//        userService.saveUser(name);
+//        stageManager.switchToNextScene(FxmlView.HOME);
+//
+//    }
+//
+//    @Override
+//    public void initialize(URL location, ResourceBundle resources) {
+//        gClef.setFitWidth(1000);
+//        gClef.setPreserveRatio(true);
+//        gClef.setSmooth(true);
+//
+//        loginErrorLabel.textProperty().bind(errorProperty);
+//
+//        userName.textProperty().addListener(new ChangeListener<>() {
+//            @Override
+//            public void changed(ObservableValue<? extends String> observable,
+//                                String oldText,
+//                                String newText) {
+//                eventPublisher.publishEvent(new LoginEvent(this, newText));
+//            }
+//        });
+//
+//    }
+//}
