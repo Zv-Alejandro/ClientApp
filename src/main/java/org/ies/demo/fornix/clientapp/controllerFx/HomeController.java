@@ -1,4 +1,4 @@
-package org.ies.demo.fornix.clientapp.controller;
+package org.ies.demo.fornix.clientapp.controllerFx;
 
 
 
