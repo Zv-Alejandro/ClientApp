@@ -17,9 +17,6 @@ public class Purchase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "payment_date")
-    private LocalDate paymentDate;
-
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;

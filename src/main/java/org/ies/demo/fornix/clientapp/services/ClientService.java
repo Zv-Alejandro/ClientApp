@@ -27,6 +27,19 @@ public class ClientService {
     private static final int MAX_INTENTOS = 3;
     private static final int MINUTOS_BLOQUEO = 15;
 
+    public Optional<Client> findByUsername(String username) {
+        return clientRepository.findByUsername(username);
+    }
+
+    public Client saveClient(String username, String passwordHashed) {
+        Client client = new Client();
+        client.setUsername(username);
+        client.setEmail(null);
+        client.setPasswordHashed(passwordHashed);
+        client.setBio(null);
+        return clientRepository.save(client);
+    }
+
     public ClientResponseDTO register(ClientRegisterDTO dto) {
         if (clientRepository.findByUsername(dto.getUsername()).isPresent()) {
             return null;
@@ -36,24 +49,12 @@ public class ClientService {
             return null;
         }
 
-        if (clientRepository.findByNickname(dto.getNickname()).isPresent()) {
-            return null;
-        }
 
         Client client = new Client();
         client.setUsername(dto.getUsername());
-        client.setNickname(dto.getNickname());
         client.setEmail(dto.getEmail());
         client.setPasswordHashed(passwordEncoder.encode(dto.getPassword()));
-        client.setEmailVerificado(false);
-        client.setFechaVerificado(null);
-        client.setIntentosLogin(0);
-        client.setUltimoIntentoLogin(null);
-        client.setBloqueadoHasta(null);
-        client.setPathProfilePictureS3(null);
         client.setBio(null);
-        client.setFechaCreacion(LocalDate.now());
-
         Client saved = clientRepository.save(client);
         return toResponseDTO(saved);
     }
@@ -65,34 +66,15 @@ public class ClientService {
             return new LoginResponseDTO(-2, "Usuario no existe");
         }
 
-        if (client.getBloqueadoHasta() != null &&
-                client.getBloqueadoHasta().isAfter(LocalDateTime.now())) {
-            return new LoginResponseDTO(-3, "Usuario bloqueado temporalmente");
-        }
 
         boolean passwordCorrecta = passwordEncoder.matches(dto.getPassword(), client.getPasswordHashed());
 
-        client.setUltimoIntentoLogin(LocalDateTime.now());
 
         if (passwordCorrecta) {
-            client.setIntentosLogin(0);
-            client.setBloqueadoHasta(null);
             clientRepository.save(client);
             return new LoginResponseDTO(1, "Login correcto");
         }
 
-        Integer intentos = client.getIntentosLogin();
-        if (intentos == null) {
-            intentos = 0;
-        }
-
-        intentos++;
-        client.setIntentosLogin(intentos);
-
-        if (intentos >= MAX_INTENTOS) {
-            client.setBloqueadoHasta(LocalDateTime.now().plusMinutes(MINUTOS_BLOQUEO));
-            client.setIntentosLogin(0);
-        }
 
         clientRepository.save(client);
         return new LoginResponseDTO(-1, "Password incorrecta");
@@ -120,13 +102,6 @@ public class ClientService {
             return null;
         }
 
-        if (dto.getNickname() != null && !dto.getNickname().equals(client.getNickname())) {
-            Optional<Client> existingNickname = clientRepository.findByNickname(dto.getNickname());
-            if (existingNickname.isPresent()) {
-                return null;
-            }
-            client.setNickname(dto.getNickname());
-        }
 
         if (dto.getEmail() != null && !dto.getEmail().equals(client.getEmail())) {
             Optional<Client> existingEmail = clientRepository.findByEmail(dto.getEmail());
@@ -134,12 +109,9 @@ public class ClientService {
                 return null;
             }
             client.setEmail(dto.getEmail());
-            client.setEmailVerificado(false);
-            client.setFechaVerificado(null);
         }
 
         client.setBio(dto.getBio());
-        client.setPathProfilePictureS3(dto.getPathProfilePictureS3());
 
         Client updated = clientRepository.save(client);
         return toResponseDTO(updated);
@@ -153,18 +125,18 @@ public class ClientService {
         return true;
     }
 
-    public ClientResponseDTO verifyEmail(Integer id) {
-        Client client = clientRepository.findById(id).orElse(null);
-        if (client == null) {
-            return null;
-        }
-
-        client.setEmailVerificado(true);
-        client.setFechaVerificado(LocalDate.now());
-
-        Client updated = clientRepository.save(client);
-        return toResponseDTO(updated);
-    }
+//    public ClientResponseDTO verifyEmail(Integer id) {
+//        Client client = clientRepository.findById(id).orElse(null);
+//        if (client == null) {
+//            return null;
+//        }
+//
+//        client.setEmailVerificado(true);
+//        client.setFechaVerificado(LocalDate.now());
+//
+//        Client updated = clientRepository.save(client);
+//        return toResponseDTO(updated);
+//    }
 
     private Client findByLogin(String login) {
         if (login == null) {
@@ -182,12 +154,8 @@ public class ClientService {
         ClientResponseDTO dto = new ClientResponseDTO();
         dto.setId(client.getId());
         dto.setUsername(client.getUsername());
-        dto.setNickname(client.getNickname());
         dto.setEmail(client.getEmail());
-        dto.setEmailVerificado(client.getEmailVerificado());
         dto.setBio(client.getBio());
-        dto.setFechaCreacion(client.getFechaCreacion());
-        dto.setPathProfilePictureS3(client.getPathProfilePictureS3());
         return dto;
     }
 }

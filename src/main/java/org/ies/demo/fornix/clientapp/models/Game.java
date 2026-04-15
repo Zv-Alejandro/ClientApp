@@ -31,12 +31,6 @@ public class Game {
 
     private String description;
 
-    @Column(name = "published_date")
-    private LocalDate publishedDate;
-
-    @Column(name = "s3_path_generic", unique = true)
-    private String s3PathGeneric;
-
     @Column(name = "tamano_mb")
     private BigDecimal tamanoMb;
 
@@ -54,9 +48,6 @@ public class Game {
 
     @OneToMany(mappedBy = "game")
     private List<Purchase> purchases;
-
-    @OneToMany(mappedBy = "game")
-    private List<Wishlist> wishlists;
 
     @OneToMany(mappedBy = "game")
     private List<Teaser> teasers;

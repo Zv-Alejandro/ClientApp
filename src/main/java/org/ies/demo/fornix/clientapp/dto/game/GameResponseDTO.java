@@ -11,8 +11,6 @@ public class GameResponseDTO {
     private Integer id;
     private String title;
     private String description;
-    private LocalDate publishedDate;
-    private String s3PathGeneric;
     private BigDecimal tamanoMb;
     private Integer downloads;
     private BigDecimal price;

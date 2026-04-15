@@ -93,16 +93,16 @@ public class ClientController {
         }
     }
 
-    @PatchMapping("/{id}/verify-email")
-    public ResponseEntity<ClientResponseDTO> verifyEmail(@PathVariable Integer id) {
-        try {
-            ClientResponseDTO response = clientService.verifyEmail(id);
-            if (response == null) {
-                return ResponseEntity.notFound().build();
-            }
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
+//    @PatchMapping("/{id}/verify-email")
+//    public ResponseEntity<ClientResponseDTO> verifyEmail(@PathVariable Integer id) {
+//        try {
+//            ClientResponseDTO response = clientService.verifyEmail(id);
+//            if (response == null) {
+//                return ResponseEntity.notFound().build();
+//            }
+//            return ResponseEntity.ok(response);
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().build();
+//        }
+//    }
 }

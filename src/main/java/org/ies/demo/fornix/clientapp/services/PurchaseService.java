@@ -49,8 +49,6 @@ public class PurchaseService {
         Purchase purchase = new Purchase();
         purchase.setClient(client);
         purchase.setGame(game);
-        purchase.setPaymentDate(LocalDate.now());
-
         Purchase saved = purchaseRepository.save(purchase);
         return toResponseDTO(saved);
     }
@@ -77,8 +75,6 @@ public class PurchaseService {
             dto.setGameId(game.getId());
             dto.setTitle(game.getTitle());
             dto.setDescription(game.getDescription());
-            dto.setPublishedDate(game.getPublishedDate());
-            dto.setS3PathGeneric(game.getS3PathGeneric());
             dto.setTamanoMb(game.getTamanoMb());
             dto.setDownloads(game.getDownloads());
             dto.setPrice(game.getPrice());
@@ -111,7 +107,6 @@ public class PurchaseService {
         DownloadResponseDTO dto = new DownloadResponseDTO();
         dto.setGameId(updatedGame.getId());
         dto.setTitle(updatedGame.getTitle());
-        dto.setDownloadPath(updatedGame.getS3PathGeneric());
         dto.setDownloads(updatedGame.getDownloads());
 
         return dto;
@@ -124,7 +119,6 @@ public class PurchaseService {
     private PurchaseResponseDTO toResponseDTO(Purchase purchase) {
         PurchaseResponseDTO dto = new PurchaseResponseDTO();
         dto.setId(purchase.getId());
-        dto.setPaymentDate(purchase.getPaymentDate());
         dto.setClientId(purchase.getClient().getId());
         dto.setGameId(purchase.getGame().getId());
         dto.setGameTitle(purchase.getGame().getTitle());

@@ -8,10 +8,6 @@ import java.time.LocalDate;
 public class ClientResponseDTO {
     private Integer id;
     private String username;
-    private String nickname;
     private String email;
-    private Boolean emailVerificado;
     private String bio;
-    private LocalDate fechaCreacion;
-    private String pathProfilePictureS3;
 }

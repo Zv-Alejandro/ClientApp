@@ -8,7 +8,6 @@ import java.time.LocalDate;
 @Data
 public class PurchaseResponseDTO {
     private Integer id;
-    private LocalDate paymentDate;
     private Integer clientId;
     private Integer gameId;
     private String gameTitle;

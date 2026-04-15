@@ -74,8 +74,6 @@ public class GameService {
         dto.setId(game.getId());
         dto.setTitle(game.getTitle());
         dto.setDescription(game.getDescription());
-        dto.setPublishedDate(game.getPublishedDate());
-        dto.setS3PathGeneric(game.getS3PathGeneric());
         dto.setTamanoMb(game.getTamanoMb());
         dto.setDownloads(game.getDownloads());
         dto.setPrice(game.getPrice());

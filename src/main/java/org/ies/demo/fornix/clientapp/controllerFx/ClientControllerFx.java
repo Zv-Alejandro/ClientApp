@@ -2,6 +2,8 @@ package org.ies.demo.fornix.clientapp.controllerFx;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -15,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.ies.demo.fornix.clientapp.config.FxmlView;
 import org.ies.demo.fornix.clientapp.config.StageManager;
+import org.ies.demo.fornix.clientapp.events.LoginEvent;
 import org.ies.demo.fornix.clientapp.exception.ConstraintsException;
 import org.ies.demo.fornix.clientapp.exception.NotFoundException;
 import org.ies.demo.fornix.clientapp.exception.UserExistsException;
@@ -31,7 +34,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 @Component
-public class ClientController implements Initializable {
+public class ClientControllerFx implements Initializable {
 
     @FXML
     private Text title;
@@ -81,11 +84,11 @@ public class ClientController implements Initializable {
 
 
     @Lazy
-    public ClientController(StageManager stageManager, ClientService clientService, ApplicationEventPublisher eventPublisher) {
+    public ClientControllerFx(StageManager stageManager, ClientService clientService, ApplicationEventPublisher eventPublisher, PasswordEncoder encoder) {
         this.stageManager = stageManager;
         this.clientService = clientService;
         this.eventPublisher = eventPublisher;
-        encoder =  new BCryptPasswordEncoder();
+        this.encoder =  encoder;
     }
 
 
@@ -93,13 +96,15 @@ public class ClientController implements Initializable {
         String name = username.getText();
         String hash = encoder.encode(password.getText());
 
-        Optional<Client> user = clientService.findByUsername(userName.getText());
+        Optional<Client> user = clientService.findByUsername(username.getText());
         if (user.isEmpty()) {
             errorProperty.setValue(
                     "No user with this name found.");
             throw new NotFoundException(errorProperty.getValue());
         }
-        if(!encoder.matches(password.getText(),user.getPasswordHashed)){
+
+        Client client = user.get();
+        if (!encoder.matches(password.getText(), client.getPasswordHashed())) {
             errorProperty.setValue(
                     "Incorrect password, did you forgot your password?");
             throw new NotFoundException(errorProperty.getValue());
@@ -127,7 +132,7 @@ public class ClientController implements Initializable {
             throw new ConstraintsException(errorProperty.getValue());
         }
 
-        if(!password.getText().equals(passwordCheck.getText()){
+        if(!password.getText().equals(passwordCheck.getText())){
             errorProperty.setValue(
                     "Passwords don't match"
             );
@@ -143,14 +148,14 @@ public class ClientController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         clientErrorLabel.textProperty().bind(errorProperty);
-//        userName.textProperty().addListener(new ChangeListener<>() {
-//            @Override
-//            public void changed(ObservableValue<? extends String> observable,
-//                                String oldText,
-//                                String newText) {
-//                eventPublisher.publishEvent(new LoginEvent(this, newText));
-//            }
-//        })
+        username.textProperty().addListener(new ChangeListener<>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                                String oldText,
+                                String newText) {
+                eventPublisher.publishEvent(new LoginEvent(this, newText));
+            }
+        })
             ;
     }
 
