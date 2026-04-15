@@ -30,7 +30,6 @@
                         <Insets top="30.0" right="30.0" bottom="30.0" left="30.0"/>
                     </padding>
 
-                    <!-- Barra superior -->
                     <HBox alignment="CENTER_LEFT" spacing="20.0">
                         <Button text="&lt;" styleClass="nav-button"/>
                         <Button text="&gt;" styleClass="nav-button"/>
@@ -54,7 +53,6 @@
                         <Label text="⌄" styleClass="dropdown-icon"/>
                     </HBox>
 
-                    <!-- Latest released -->
                     <VBox spacing="18.0">
                         <HBox alignment="CENTER_LEFT">
                             <VBox spacing="5.0">
@@ -144,7 +142,6 @@
                         </ScrollPane>
                     </VBox>
 
-                    <!-- Recommendations -->
                     <VBox spacing="18.0">
                         <VBox spacing="5.0">
                             <Label text="Recommendations" styleClass="section-title"/>
@@ -226,7 +223,6 @@
                         </ScrollPane>
                     </VBox>
 
-                    <!-- Offers -->
                     <VBox spacing="18.0">
                         <VBox spacing="5.0">
                             <Label text="Offers" styleClass="section-title"/>
